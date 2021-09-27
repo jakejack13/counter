@@ -1,50 +1,44 @@
 version: v1.0
-name: Build and Test
+name: Pushing a Docker image
 agent:
   machine:
     type: e1-standard-2
     os_image: ubuntu1804
+
 blocks:
-  - name: Build App
+  - name: Build and run tests
     task:
       jobs:
-        - name: Build App
+        - name: Build and run tests
           commands:
             - checkout
-            - docker build -t your-image .
-    dependencies:
-      - Run Test
-  - name: Build Test
-    dependencies: []
-    task:
-      jobs:
-        - name: Build Test
-          commands:
-            - checkout
-            - docker build . -f testDockerfile -t jakejack13/counter-test
-  - name: Run Test
-    dependencies:
-      - Build Test
-    task:
-      jobs:
-        - name: Run Test
-          commands:
+            - docker build -t jakejack13/counter-test -f testDockerfile .
             - docker run jakejack13/counter-test
-  - name: Run App
+  - name: Build and run app
     dependencies:
-      - Build App
+      - Build and run tests
     task:
       jobs:
-        - name: Run App
+        - name: Build and run app
           commands:
-            - 'docker run -d -p 8080:8080 jakejack13/counter-test'
-            - 'curl localhost:8080/hello'
-promotions:
-  - name: Push App Image
-    pipeline_file: prod.yml
-    auto_promote:
-      when: branch = 'main' AND result = 'passed'
-  - name: Push Test Image
-    pipeline_file: test.yml
-    auto_promote:
-      when: branch = 'main' AND result = 'passed'
+            - checkout
+            - docker build -t jakejack13/counter .
+            - docker run -d -p 8080:8080 jakejack13/counter
+            - curl localhost:8080/hello
+  - name: Push Docker image to registry
+    dependencies:
+      - Build and run app
+    task:
+      jobs:
+      - name: Docker Hub
+        commands:
+          - checkout
+          - echo $DOCKER_PASSWORD | docker login --username "$DOCKER_USERNAME" --password-stdin
+          - docker build -t counter .
+          - docker tag counter "$DOCKER_USERNAME"/counter
+          - docker push "$DOCKER_USERNAME"/counter
+          - docker pull "$DOCKER_USERNAME"/counter
+          - docker images
+
+      secrets:
+      - name: docker-hub
