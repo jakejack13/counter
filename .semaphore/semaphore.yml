@@ -13,8 +13,8 @@ blocks:
         - name: Build and run tests
           commands:
             - checkout
-            - docker build -t jakejack13/counter-test -f testDockerfile .
-            - docker run jakejack13/counter-test
+            - docker build -t counter-test -f testDockerfile .
+            - docker run counter-test
   - name: Build and run app
     dependencies:
       - Build and run tests
@@ -23,8 +23,8 @@ blocks:
         - name: Build and run app
           commands:
             - checkout
-            - docker build -t jakejack13/counter .
-            - docker run -d -p 8080:8080 jakejack13/counter
+            - docker build -t counter .
+            - docker run -d -p 8080:8080 counter
             - curl localhost:8080/hello
   - name: Push Docker image to registry
     dependencies:
