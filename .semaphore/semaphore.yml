@@ -1,14 +1,36 @@
 version: v1.0
-name: Docker
+name: Build and Test
 agent:
   machine:
     type: e1-standard-2
     os_image: ubuntu1804
 blocks:
-  - name: Build
+  - name: Build App
     task:
       jobs:
-        - name: docker build
+        - name: Build App
           commands:
             - checkout
             - docker build -t your-image .
+    dependencies:
+      - Test
+  - name: Test
+    dependencies: []
+    task:
+      jobs:
+        - name: Build Test
+          commands:
+            - checkout
+            - docker build . -f testDockerfile -t jakejack13/counter-test
+        - name: Run Test
+          commands:
+            - docker run jakejack13/counter-test
+promotions:
+  - name: Push App Image
+    pipeline_file: pipeline_2.yml
+    auto_promote:
+      when: branch = 'main' AND result = 'passed'
+  - name: Push Test Image
+    pipeline_file: pipeline_3.yml
+    auto_promote:
+      when: branch = 'main' AND result = 'passed'
