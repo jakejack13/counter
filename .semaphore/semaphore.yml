@@ -7,6 +7,7 @@ agent:
 
 blocks:
   - name: Build and run tests
+    dependencies: []
     task:
       jobs:
         - name: Build and run tests
@@ -27,7 +28,6 @@ blocks:
             - curl localhost:8080/hello
   - name: Push Docker image to registry
     dependencies:
-      - Build and run tests
       - Build and run app
     task:
       jobs:
