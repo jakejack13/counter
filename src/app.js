@@ -1,11 +1,11 @@
-// const http = require('http');
+//@ts-check
 
-// const requestListener = function (req, res) {
-//   res.writeHead(200);
-//   res.end('Hello, World!\n');
-// }
+const http = require('http');
 
-// const server = http.createServer(requestListener);
-// server.listen(8080);
+const requestListener = function (req, res) {
+  res.writeHead(200);
+  res.end('Hello, World!\n');
+}
 
-console.log("Success");
+const server = http.createServer(requestListener);
+server.listen(8080);
