@@ -22,8 +22,6 @@ blocks:
           commands:
             - checkout
             - docker build . -f testDockerfile -t jakejack13/counter-test
-        - name: ''
-          commands: []
   - name: Run Test
     dependencies:
       - Build Test
@@ -43,10 +41,10 @@ blocks:
             - 'curl localhost:8080/hello'
 promotions:
   - name: Push App Image
-    pipeline_file: pipeline_2.yml
+    pipeline_file: prod.yml
     auto_promote:
       when: branch = 'main' AND result = 'passed'
   - name: Push Test Image
-    pipeline_file: pipeline_3.yml
+    pipeline_file: test.yml
     auto_promote:
       when: branch = 'main' AND result = 'passed'
