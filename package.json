@@ -1,0 +1,14 @@
+{
+    "name": "test_server",
+    "version": "0.0.0",
+    "description": "Test node server",
+    "author": "Jacob Kerr <jck268@cornell.edu>",
+    "main": "src/app.js",
+    "scripts": {
+        "start": "node src/app.js",
+        "test": "node src/test.js"
+    },
+    "devDependencies": {
+        "mocha": "^9.1.2"
+    }
+}
