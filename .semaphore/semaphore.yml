@@ -13,8 +13,8 @@ blocks:
             - checkout
             - docker build -t your-image .
     dependencies:
-      - Test
-  - name: Test
+      - Run Test
+  - name: Build Test
     dependencies: []
     task:
       jobs:
@@ -22,9 +22,25 @@ blocks:
           commands:
             - checkout
             - docker build . -f testDockerfile -t jakejack13/counter-test
+        - name: ''
+          commands: []
+  - name: Run Test
+    dependencies:
+      - Build Test
+    task:
+      jobs:
         - name: Run Test
           commands:
             - docker run jakejack13/counter-test
+  - name: Run App
+    dependencies:
+      - Build App
+    task:
+      jobs:
+        - name: Run App
+          commands:
+            - 'docker run -d -p 8080:8080 jakejack13/counter-test'
+            - 'curl localhost:8080/hello'
 promotions:
   - name: Push App Image
     pipeline_file: pipeline_2.yml
