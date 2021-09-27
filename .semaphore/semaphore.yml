@@ -25,7 +25,8 @@ blocks:
             - checkout
             - docker build -t counter .
             - docker run -d -p 8080:8080 counter
-            - curl localhost:8080/hello
+            - wget localhost:8080/hello
+            - cat hello
   - name: Push Docker image to registry
     dependencies:
       - Build and run app
