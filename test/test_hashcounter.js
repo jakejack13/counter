@@ -73,4 +73,12 @@ describe('HashCounter', function() {
         assert.equal(counter.get(key1), 0);
       });
     });
+    describe('add() + get() with multiple keys', function() {
+      it('should equal 1 when adding key1 and 0 when not adding key2', function() {
+        let counter = new hashcounter.HashCounter();
+        counter.add(key1);
+        assert.equal(counter.get(key1), 1);
+        assert.equal(counter.get(key2), 0);
+      });
+    });
   });
