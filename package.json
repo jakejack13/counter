@@ -1,6 +1,6 @@
 {
     "name": "hashcounter",
-    "version": "0.0.0",
+    "version": "1.0.0",
     "description": "Simple counter object using hashing with demo server",
     "author": "Jacob Kerr <jck268@cornell.edu>",
     "main": "src/hashcounter.js",
